@@ -13,50 +13,124 @@
             <img src="https://sp-ao.shortpixel.ai/client/to_webp,q_glossy,ret_img,w_350,h_132/https://khoemassage.com/wp-content/uploads/2021/07/logo.jpg"
                 alt="" class="logo" />
 
-            <div class="page-selector">
+            <div class="page-selector hidden">
                 <button class="search-coupon-selector selected">Tìm coupon</button>
                 <button class="create-coupon-selector">Tạo coupon</button>
-                <button class="create-user-selector">Tạo người dùng</button>
+                <button class="create-user-selector hidden">Tạo người dùng</button>
             </div>
         </header>
 
         <!-- login -->
         <div class="login-page">
             <form class="login-form">
-                <input type="text" placeholder="username" />
-                <input type="password" placeholder="password" />
-                <button>login</button>
+                <input type="text" placeholder="username" id="user-name"/>
+                <input type="password" placeholder="password" id = "password"/>
+                <button id="login">login</button>
+                <p class="danger hidden"></p>
             </form>
+
+            <div class="waiting hidden">
+                <h3>Đang tải dữ liệu</h3>
+            </div>
         </div>
         
         <!-- search coupon -->
-        <div class="search-coupon">
+        <div class="search-coupon hidden">
             <form class="search-form">
-                <input type="text" placeholder="username" />
-                <button>login</button>
+                <input type="text" placeholder="SDT khách hàng" />
+                <button>Tìm kiếm khách</button>
             </form>
             <div class="search-result">
-                <h3 class="coupon-id">123456</h2>
-                <h3 class="coupon-owner">Khách hàng:Anh A - 0912345678</h3>
-                <h3 class="coupon-value">Giá trị còn/Tổng: 550k/980k</h3>
-                <h3 class="coupon-date">Hạn coupon: 550k/980k</h3>
+                <div class="coupon-id">
+                    <label for="coupon-id">Coupon ID: </label>
+                    <input id="coupon-id" value="123" readonly/>
+                </div>
+                <div class="coupon-owner">
+                    <label for="coupon-owner">Khách hàng: </label>
+                    <input id="coupon-owner" value="abc" readonly/>
+                </div>
+                <div class="phone-number">
+                    <label for="phone-number">Số điện thoại: </label>
+                    <input id="phone-number" value="123456789" readonly/>
+                </div>
+                <div class="coupon-value">
+                    <label for="coupon-value">Giá trị còn/Tổng: </label>
+                    <input id="coupon-value" value="550k/980k" readonly/>
+                </div>
+                <div class="coupon-date">
+                    <label for="coupon-date">Hạn coupon: </label>
+                    <input id="coupon-date" value="10/12/2022" readonly/>
+                </div>
                 <div class="coupon-history">
-                    <p>Lorem, ipsum dolor.</p>
-                    <p>Lorem, ipsum dolor.</p>
-                    <p>Lorem, ipsum dolor.</p>
+                    <h3>Lịch sử dùng coupon</h3>
+                    <input value="ngày 20/20/2022: 100k" readonly/>
+                    <input value="ngày 20/20/2022: 100k" readonly/>
+                    <input value="ngày 20/20/2022: 100k" readonly/>
+                    <input value="ngày 20/20/2022: 100k" readonly/>
+                </div>
+                <div class="action-btns">
+                    <button class="">Sử dụng Coupon</button>
+                    <button class="">Chỉnh sửa thông tin</button>
                 </div>
             </div>
-            <div class="action-btns">
-                <button class="use-coupon">Sử dụng Coupon</button>
-                <button class="use-coupon">Chỉnh sửa thông tin</button>
-            </div>
         </div>
-
+        <!-- end of search coupon -->
         <!-- create coupon -->
+        <div class="create-coupon hidden">
+            <form action="" class="coupon-infor-form">
+                <div class="coupon-owner">
+                    <label for="coupon-owner">Khách hàng: </label>
+                    <input id="coupon-owner" value="abc" />
+                </div>
+                <div class="phone-number">
+                    <label for="phone-number">Số điện thoại: </label>
+                    <input id="phone-number" value="123456789" />
+                </div>
+                <div class="coupon-value">
+                    <label for="coupon-value">Giá trị coupon: </label>
+                    <input id="coupon-value" value="550k/980k" />
+                </div>
+                <div class="coupon-value">
+                    <label for="coupon-value">Giá trị 1 lượt </label>
+                    <input id="coupon-value" value="550k/980k" />
+                </div>
+                <div class="coupon-date">
+                    <label for="coupon-date">Hạn coupon: </label>
+                    <input id="coupon-date" value="10/12/2022" />
+                </div>
+                <button class="" id="create-coupon">Tạo coupon</button>
+            </form>
+        </div>
+        <!-- end of create coupon -->
 
         <!-- user management -->
-
-
+        <div class="user-management hidden">
+            <form action="" class="user-infor-form">
+                <div class="coupon-value">
+                    <label for="coupon-value">Tài khoản: </label>
+                    <input id="coupon-value" value="550k/980k" />
+                </div>
+                <div class="coupon-date">
+                    <label for="coupon-date">Mật khẩu: </label>
+                    <input id="coupon-date" value="10/12/2022" />
+                </div>
+                <button class="" id="create-coupon">Tạo user</button>
+            </form>
+            <div class="users-list">
+                <div class="user-infor">
+                    <div class="coupon-value">
+                        <label for="coupon-value">Tài khoản: </label>
+                        <input id="coupon-value" value="550k/980k" />
+                    </div>
+                    <div class="coupon-date">
+                        <label for="coupon-date">Mật khẩu: </label>
+                        <input id="coupon-date" value="10/12/2022" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- end of user management -->
     </div>
 
     <script src="script.js"></script>

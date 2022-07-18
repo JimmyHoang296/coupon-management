@@ -26,13 +26,45 @@ body {
       margin-right: auto;
       background-color: rgba(201, 201, 201, 0.1);
     }
+
+/* global component */
+input{
+    font-family: "Roboto", sans-serif;
+    outline: 0;
+    background: #f2f2f2;
+    border-radius: 5px;
+    border: 0;
+    margin: 0 0 15px;
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+input:focus::placeholder {
+    color:transparent
+}
+button{
+    font-family: "Roboto", sans-serif;
+    text-transform: uppercase;
+    outline: 0;
+    border-radius: 5px;
+    background: #4caf50;
+    border: 0;
+    padding: 15px;
+    color: #ffffff;
+    font-size: 14px;
+    -webkit-transition: all 0.3 ease;
+    transition: all 0.3 ease;
+    cursor: pointer;
+    font-weight: 700;
+}
 /* header */
 
 .header{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px;
+    padding: 20px 40px;
 }
 
 .logo {
@@ -67,7 +99,9 @@ body {
 
 /* wrapper */
 
-
+.hidden{
+    display: none;
+}
 /*login page  */
 
 .login-page {
@@ -81,6 +115,7 @@ body {
   z-index: 1;
   background: #ffffff;
   max-width: 360px;
+  border-radius: 5px;
   margin: 0 auto 50px;
   padding: 45px;
   text-align: center;
@@ -91,16 +126,19 @@ body {
   outline: 0;
   background: #f2f2f2;
   width: 100%;
+  border-radius: 5px;
   border: 0;
   margin: 0 0 15px;
   padding: 15px;
   box-sizing: border-box;
   font-size: 14px;
 }
+
 .login-form button {
   font-family: "Roboto", sans-serif;
   text-transform: uppercase;
   outline: 0;
+  border-radius: 5px;
   background: #4caf50;
   width: 100%;
   border: 0;
@@ -115,4 +153,128 @@ body {
 .login-form button:active,
 .login-form button:focus {
   background: #43a047;
+}
+
+.danger{
+    font-size: 14px;
+    margin-top: 10px;
+    color: red;
+}
+/* search coupon */
+
+.search-coupon{
+    padding: 40px;
+}
+
+.search-form{
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    margin-bottom: 20px;
+}
+
+.search-form input{
+    margin-right: 10px;
+    margin-bottom: 0;
+}
+
+.search-result{
+    display: grid;
+    grid-row-gap: 10px;
+    grid-template-columns: 1fr 1fr;
+    background-color: rgb(255, 255, 255,0.2);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.search-result input{
+    margin: 0;
+    padding: 5px 10px;
+    background-color: transparent;
+    font-weight: 700;
+    font-size: 16px;
+
+    
+}
+
+.coupon-id{
+    grid-column: 1/3;
+}
+
+.coupon-owner{
+
+}
+
+.coupon-value{
+
+}
+
+.coupon-date{
+
+}
+
+.coupon-history{
+    grid-column: 1/3;
+    display: flex;
+    flex-direction: column;
+}
+
+.action-btns{
+    grid-column: 1/3;
+}
+
+.use-coupon{
+
+}
+
+.use-coupon{
+
+}
+/* create coupon */
+
+.create-coupon {
+    padding: 40px;
+}
+
+.coupon-infor-form{
+    display: grid;
+    grid-row-gap: 10px;
+    grid-template-columns: 1fr 1fr;
+    background-color: rgb(255, 255, 255,0.2);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.create-coupon #create-coupon{
+    grid-column: 1/2;
+}
+
+/* user management */
+.user-management{
+    padding: 40px;
+}
+
+.user-infor-form{
+    display: grid;
+    grid-row-gap: 10px;
+    grid-template-columns: 1fr 1fr;
+    background-color: rgb(255, 255, 255,0.2);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.users-list{
+    margin-top: 20px;
+}
+
+.user-infor{
+    display: grid;
+    grid-row-gap: 10px;
+    grid-template-columns: 1fr 1fr;
+    background-color: rgb(255, 255, 255,0.2);
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+.user-infor input{
+    margin-bottom: 0;
 }
