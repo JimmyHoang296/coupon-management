@@ -2,7 +2,7 @@
 var USER_NAME
 var USER_TYPE
 var IS_LOG_IN
-
+const URL = "https://script.google.com/macros/s/AKfycbwcnDPXOlbfuW_flSAwYMay7TZ4u0j1EF3PNb47irHZsZFi8FKFySzWHCe0B0EBz7G0/exec"
 // nav function
 
 const searchCouponSelector = document.querySelector('.search-coupon-selector')
@@ -52,13 +52,24 @@ createUserSelector.addEventListener('click', ()=>{
 })
 
 // login function
+
 const navList = document.querySelector('.page-selector')
 const loginPage = document.querySelector('.login-page')
 const userNameInput =document.querySelector('#user-name')
 const passwordInput =document.querySelector('#password')
 
 const loginBtn = document.querySelector('#login')
+const waitingComponent = document.querySelector('.waiting')
 const dangerComponent = document.querySelector('.danger')
+
+userNameInput.addEventListener('input', ()=>{
+    dangerComponent.classList.add('hidden')
+})
+passwordInput.addEventListener('input', ()=>{
+    dangerComponent.classList.add('hidden')
+})
+
+
 loginBtn.addEventListener('click', (e)=>{ 
     e.preventDefault()
 
@@ -68,33 +79,54 @@ loginBtn.addEventListener('click', (e)=>{
         dangerComponent.classList.remove('hidden')
         return
     }
-
+    waitingComponent.classList.remove('hidden')
     // send request
+    let submitData = {
+        "type": "login",
+        "data": {
+            "user": userNameInput.value,
+            "password": passwordInput.value
+        }
+    }
 
-    console.log ('loginnn...')
+    fetch(URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8'
+        },
+        body: JSON.stringify(submitData) // body data type must match "Content-Type" header
+    })
+    .then (response => {
+        // console.log(response.json())
+        
+        return response.json()})
+    .then (data => {
+        waitingComponent.classList.add('hidden')
+        console.log (data)
+        handleLogin(data);
+    }).catch(error => {
+        console.error('Error:', error);
+    });
+})
 
-    let isSuccess = true
-
-    if (!isSuccess){
-        console.log ('login fail')
+const handleLogin = (response) => {
+    if (response.status === false){
         dangerComponent.innerHTML = "Tên đăng nhập hoặc mật khẩu sai"
         dangerComponent.classList.remove('hidden')
         return
     }
-    // Login success
+       
+    alert ('Đăng nhập thành công')
+    USER_NAME = userNameInput.value
+    USER_TYPE = response.userType
+    IS_LOG_IN = true
 
-    if(isSuccess){
-        console.log ('login success')
-        
-        alert ('Đăng nhập thành công')
-        USER_NAME = userNameInput.value
-        USER_TYPE = 'user'
-        IS_LOG_IN = true
-
-        loginPage.classList.add('hidden')
-        navList.classList.remove('hidden')
-        searchCouponSelector.classList.add('selected');
-        searchCoupon.classList.remove('hidden')
+    loginPage.classList.add('hidden')
+    navList.classList.remove('hidden')
+    if(USER_TYPE ==='admin'){
+        document.querySelector('.create-user-selector').classList.remove('hidden')
     }
+    searchCouponSelector.classList.add('selected');
+    searchCoupon.classList.remove('hidden')
 
-})
+}
