@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Roboto:300);
+@import url(https://fonts.googleapis.com/css?family=Roboto:300,500,700);
 
 * {
   margin: 0;
@@ -17,8 +17,13 @@ body {
     font-family: "Roboto", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-weight: 300;
   }
-  
+
+  h3{
+    font-weight: 300;
+  }
+
   .wrapper{
       max-width: 1000px;
       min-height: 100vh;
@@ -28,7 +33,7 @@ body {
     }
 
 /* global component */
-input{
+input, select{
     font-family: "Roboto", sans-serif;
     outline: 0;
     background: #f2f2f2;
@@ -43,7 +48,8 @@ input{
 input:focus::placeholder {
     color:transparent
 }
-button{
+button {
+    width: fit-content;
     font-family: "Roboto", sans-serif;
     text-transform: uppercase;
     outline: 0;
@@ -56,7 +62,18 @@ button{
     -webkit-transition: all 0.3 ease;
     transition: all 0.3 ease;
     cursor: pointer;
-    font-weight: 700;
+    font-weight: 700;   
+}
+
+button:hover{
+    opacity: 0.8;
+}
+
+.section{
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 /* header */
 
@@ -166,10 +183,85 @@ button{
     margin-top: 10px;
     color: green;
 }
+
+/* use service */
+.room-list,
+.emp-list,
+.user-service-form,
+.onwork-service {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 100px);
+    grid-gap: 20px ;
+    padding: 20px;
+    background-color: hsl(0, 0%, 72%,0.4);
+    border-radius: 10px;
+}
+
+.room-infor,
+.emp-infor{
+    background-color: #E9EFC0;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 14px;
+    color: #4E944F;
+}
+
+.room-infor .id{
+    font-size: 12px;
+}
+
+.room-infor .number{
+    font-size: 40px;
+    margin: 5px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.user-service-form,
+.onwork-service{
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-gap: 10px;
+
+}
+.user-service-form div,
+.onwork-service div{
+    display: flex;
+    align-items: center;
+}
+
+.user-service-form label,
+.onwork-service label{
+    margin-right: 10px;
+}
+
+.user-service-form select,
+.user-service-form input,
+.onwork-service select,
+.onwork-service input{
+    margin: 0;
+    padding: 5px 10px;
+}
+
+.btn-group{
+    grid-column: 1/1;
+    margin-top: 10px;
+}
+
+#add-more-service{
+
+}
+
+#create-service{
+
+    margin-left: 10px;
+}
+
+/* end use service */
+
 /* search coupon */
 
 .search-coupon{
-    padding: 40px;
 }
 
 .search-form{
