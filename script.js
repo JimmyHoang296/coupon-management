@@ -302,8 +302,8 @@ const getToday = () =>{
     return today = dd + '/' + mm + '/' + yyyy;
 }
 
-const handleSubmit = (data) =>{
-
+const handleSubmit = () =>{
+    renderData(DATA)
 }
 const submitNewService = () => {
     // get data
@@ -345,7 +345,8 @@ const submitNewService = () => {
     .then (response => response.json())
     .then (data => {
         console.log (data)
-        handleSubmit(data);
+        DATA = data.data
+        handleSubmit();
     }).catch(error => {
         console.error('Error:', error);
     });
