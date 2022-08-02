@@ -309,7 +309,8 @@ const submitNewService = () => {
     // get data
     const serviceInfo =[]
     const formList = document.querySelectorAll('.user-service-form')
-    
+    const modal = document.querySelector('.modal')
+    modal.classList.remove('hidden')
     formList.forEach(form => {
         const locker = form.querySelector('.locker').value
         const room = form.querySelector('.room').value
@@ -346,8 +347,10 @@ const submitNewService = () => {
     .then (data => {
         console.log (data)
         DATA = data.data
+        modal.classList.add('hidden')
         handleSubmit();
     }).catch(error => {
+        modal.classList.add('hidden')
         console.error('Error:', error);
     });
 
