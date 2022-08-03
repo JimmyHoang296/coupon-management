@@ -86,12 +86,10 @@ loginBtn.addEventListener('click', (e)=>{
         body: JSON.stringify(submitData) // body data type must match "Content-Type" header
     })
     .then (response => {
-        // console.log(response.json())
         
         return response.json()})
     .then (data => {
         waitingComponent.classList.add('hidden')
-        console.log (data)
         handleLogin(data);
     }).catch(error => {
         console.error('Error:', error);
@@ -227,7 +225,6 @@ submitBtn.addEventListener('click', (e)=>{
         body: JSON.stringify(submitData) // body data type must match "Content-Type" header
     })
     .then (response => {
-        // console.log(response.json())
         
         return response.json()})
     .then (data => {
@@ -270,7 +267,6 @@ createCouponBtn.addEventListener('click', (e)=>{
     // validate input
     var date_regex = /^(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$/;
     if (!(date_regex.test(couponDate.value))) {
-        console.log (couponDate)
         cautionEle.innerHTML = 'Nhập đúng định dạng ngày dd/mm/yyyy'
         cautionEle.classList.remove('hidden')
         return
@@ -281,7 +277,6 @@ createCouponBtn.addEventListener('click', (e)=>{
         couponValue.value = ''
         return
     }
-    console.log(1)
     if (DATA.coupon.map(coupon=> coupon[0]).includes(couponID.value)){
         cautionEle.innerHTML = 'Coupon ID đã tồn tại'
         cautionEle.classList.remove('hidden')
@@ -320,7 +315,6 @@ createCouponBtn.addEventListener('click', (e)=>{
         body: JSON.stringify(submitData) // body data type must match "Content-Type" header
     })
     .then (response => {
-        // console.log(response.json())
         
         return response.json()})
     .then (data => {
