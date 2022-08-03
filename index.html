@@ -14,10 +14,8 @@
                 alt="" class="logo" />
 
             <div class="page-selector hidden">
-                <button class="use-service-selector">Dùng DV</button>
                 <button class="search-coupon-selector">Tìm coupon</button>
                 <button class="create-coupon-selector">Tạo coupon</button>
-                <button class="create-user-selector hidden">Tạo người dùng</button>
             </div>
         </header>
 
@@ -31,63 +29,6 @@
                 <p class="waiting hidden">Đang lấy dữ liệu</p>
             </form>
         </div>
-        <!-- start use service -->
-        <div class="use-service section hidden">
-            <div class="room-list">
-                <!-- <div class="room-infor">
-                    <h3 class="id">Phòng 1</h3>
-                    <h3 class="number">5</h3>
-                    <h3 class="type">giường</h3>
-                </div> -->
-            </div>
-
-            <div class="emp-list">
-                <!-- <div class="emp-infor">A</div>
-                <div class="emp-infor">B</div>
-                <div class="emp-infor">C</div>
-                <div class="emp-infor">D</div> -->
-            </div>
-
-            <div>
-                <form class="user-service-form">
-                    <div >
-                        <label for="locker">Locker</label>
-                        <input type="text" class="locker">
-                    </div>
-                    <div>
-                        <label for="room">Phòng</label>
-                        <select name="room" class="room">
-                        </select>
-                    </div>
-                    <div>
-                        <label for="service">Dịch vụ</label>
-                        <select name="service" class="service">
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label for="ktv">Kỹ thuật viên</label>
-                        <select name="ktv" class="ktv">
-                        </select>
-                    </div>
-                    <div>
-                        <label for="intime">Giờ vào</label>
-                        <input type="time" class="intime" value = "08:00"
-                        min="08:00" max="24:00" >
-                    </div>
-                </form>
-                <div class="btn-group">
-                    <button id="add-more-service">Thêm khách</button>
-                    <button id="create-service">Tạo dịch vụ</button>
-                </div>
-            </div>
-            <div class="bill-service">
-
-            </div>
-        </div>
-        <!-- end use service -->
-
-
         <!-- search coupon -->
         <div class="search-coupon section hidden">
             <form class="search-form">
@@ -95,68 +36,51 @@
                 <button>Tìm kiếm khách</button>
             </form>
             <div class="search-result"></div>
-            <div class="action-btns">
-                <button class="">Sử dụng Coupon</button>
-                <button class="">Chỉnh sửa thông tin</button>
-            </div>
         </div>
         <!-- end of search coupon -->
+        <!-- start use coupon -->
+        <div class="use-coupon-value hidden">
+            <form action="">
+                <input type="text" class="use-value" placeholder="Giá trị sử dụng">
+                <div>
+                    <button class="submit">Sử dụng</button>
+                    <button class="cancel">Bỏ qua</button>
+                </div>
+                <p class="danger hidden">Nhập đúng số</p>
+            </form>
+        </div>
+        <!-- end use coupon -->
 
         <!-- create coupon -->
-        <div class="create-coupon section hidden">
+        <div class="create-coupon section">
             <form action="" class="coupon-infor-form">
+                <div class="coupon-id">
+                    <label for="coupon-id">Mã coupon: </label>
+                    <input id="coupon-id" value="" />
+                </div>
                 <div class="coupon-owner">
-                    <label for="coupon-owner1">Khách hàng: </label>
-                    <input id="coupon-owner1" value="abc" />
+                    <label for="coupon-owner">Họ tên khách hàng: </label>
+                    <input id="coupon-owner" value="" />
                 </div>
                 <div class="phone-number">
-                    <label for="phone-number1">Số điện thoại: </label>
-                    <input id="phone-number1" value="123456789" />
+                    <label for="phone-number">Số điện thoại: </label>
+                    <input id="phone-number" value="" />
                 </div>
                 <div class="coupon-value">
-                    <label for="coupon-value1">Giá trị coupon: </label>
-                    <input id="coupon-value1" value="550k/980k" />
-                </div>
-                <div class="coupon-value">
-                    <label for="coupon-value1">Giá trị 1 lượt </label>
-                    <input id="coupon-value2" value="550k/980k" />
+                    <label for="coupon-value">Giá trị coupon: </label>
+                    <input id="coupon-value" value="" />
                 </div>
                 <div class="coupon-date">
-                    <label for="coupon-date1">Hạn coupon: </label>
-                    <input id="coupon-date1" value="10/12/2022" />
+                    <label for="coupon-date">Hạn coupon: </label>
+                    <input id="coupon-date" value="" placeholder="dd/mm/yyyy"/>
                 </div>
                 <button class="" id="create-coupon">Tạo coupon</button>
+                <p class="danger hidden">Nhập đúng số</p>
+                
             </form>
         </div>
         <!-- end of create coupon -->
 
-        <!-- user management -->
-        <div class="user-management section hidden">
-            <!-- <form action="" class="user-infor-form">
-                <div class="coupon-value">
-                    <label for="coupon-value">Tài khoản: </label>
-                    <input id="coupon-value" value="550k/980k" />
-                </div>
-                <div class="coupon-date">
-                    <label for="coupon-date">Mật khẩu: </label>
-                    <input id="coupon-date" value="10/12/2022" />
-                </div>
-                <button class="" id="create-coupon">Tạo user</button>
-            </form>
-            <div class="users-list">
-                <div class="user-infor">
-                    <div class="coupon-value">
-                        <label for="coupon-value">Tài khoản: </label>
-                        <input id="coupon-value" value="550k/980k" />
-                    </div>
-                    <div class="coupon-date">
-                        <label for="coupon-date">Mật khẩu: </label>
-                        <input id="coupon-date" value="10/12/2022" />
-                    </div>
-                </div>
-            </div> -->
-        </div>
-        <!-- end of user management -->
     </div>
     <div class="modal hidden"></div>
     <script src="script.js"></script>

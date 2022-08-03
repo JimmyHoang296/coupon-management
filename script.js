@@ -4,40 +4,24 @@ var USER_TYPE
 var SITE
 var IS_LOG_IN
 var DATA
-const URL = "https://script.google.com/macros/s/AKfycbzzwANelXMFEZz-23EqLzY5wAEfpOduBUW8YzELdAiGcfHTK-dKxRO57pwOCBzx4cpP/exec"
+var COUPONID
+const URL = "https://script.google.com/macros/s/AKfycbyPXO2T7g3BVFJaEeFxtTbFNZDxBbCtJwOw72aIiqc1hOTd9LbWo7PxNnrtkIeOb66U/exec"
 // nav function
 
-const useServiceSelector = document.querySelector('.use-service-selector')
 const searchCouponSelector = document.querySelector('.search-coupon-selector')
 const createCouponSelector = document.querySelector('.create-coupon-selector')
-const createUserSelector = document.querySelector('.create-user-selector')
 
-const useService = document.querySelector('.use-service')
 const searchCoupon = document.querySelector('.search-coupon')
 const createCoupon = document.querySelector('.create-coupon')
-const userManagement = document.querySelector('.user-management')
 
 const hidePage = () =>{
-    useService.classList.add('hidden')
     searchCoupon.classList.add ('hidden')
     createCoupon.classList.add ('hidden')
-    userManagement.classList.add ('hidden')
 }
 const unselectNav = () =>{
-    useServiceSelector.classList.remove('selected')
     searchCouponSelector.classList.remove('selected')
     createCouponSelector.classList.remove('selected')
-    createUserSelector.classList.remove('selected')
 }
-
-useServiceSelector.addEventListener('click', ()=>{
-    if(!useServiceSelector.classList.contains('selected')){
-        unselectNav()
-        useServiceSelector.classList.add('selected');
-        hidePage()
-        useService.classList.remove('hidden')
-    }
-})
 
 searchCouponSelector.addEventListener('click', ()=>{
     if(!searchCouponSelector.classList.contains('selected')){
@@ -54,15 +38,6 @@ createCouponSelector.addEventListener('click', ()=>{
         createCouponSelector.classList.add('selected');
         hidePage()
         createCoupon.classList.remove('hidden')
-    }
-})
-
-createUserSelector.addEventListener('click', ()=>{
-    if(!createUserSelector.classList.contains('selected')){
-        unselectNav()
-        createUserSelector.classList.add('selected');
-        hidePage()
-        userManagement.classList.remove('hidden')
     }
 })
 
@@ -83,7 +58,6 @@ userNameInput.addEventListener('input', ()=>{
 passwordInput.addEventListener('input', ()=>{
     dangerComponent.classList.add('hidden')
 })
-
 
 loginBtn.addEventListener('click', (e)=>{ 
     e.preventDefault()
@@ -124,102 +98,6 @@ loginBtn.addEventListener('click', (e)=>{
     });
 })
 
-
-const renderData = (data) => {
-    const roomList = data.roomList
-    const roomListElement = document.querySelector('.room-list')
-    roomListElement.innerHTML = ''
-    roomList.forEach (room => {
-        [CS,roomID,roomCap,roomType,roomAvail] = room
-        roomListElement.innerHTML =  roomListElement.innerHTML + `
-                <div class="room-infor">
-                    <h3 class="id">Phòng ${roomID}</h3>
-                    <h3 class="number">${roomAvail}</h3>
-                    <h3 class="type">${roomCap} ${roomType}</h3>
-                </div>
-        `
-    })
-
-    const empList = data.emp
-    const empListElement = document.querySelector('.emp-list')
-    empListElement.innerHTML = ''
-    empList.forEach (emp => { 
-        empListElement.innerHTML += `
-            <div class="emp-infor">${emp[4]}</div>
-        `
-    })
-
-    const billList = data.bill
-    const billListElement = document.querySelector('.bill-service')
-    billListElement.innerHTML = ''
-    billList.forEach(bill => {
-        if (bill[24] === true) return
-        billListElement.innerHTML += `
-            <form class="onwork-service">
-                <div >
-                    <label for="locker">Locker</label>
-                    <input type="text" class="locker" value="${bill[2]}" disabled>
-                </div>
-                <div>
-                    <label for="room">Phòng</label>
-                    <input type="text" class="room" value="${bill[3]}" disabled>
-                </div>
-                <div>
-                    <label for="service">Dịch vụ</label>
-                    <input type="text" class="service" value="${bill[5]}" disabled>
-                </div>
-                
-                <div>
-                    <label for="ktv">Kỹ thuật viên</label>
-                    <input type="text" class="ktv" value="${bill[7]}" disabled>
-                </div>
-                <div>
-                    <label for="intime">Giờ vào</label>
-                    <input type="text" class="intime" value="${bill[8]}" disabled>
-                </div>
-                <div>
-                    <label for="outtime">Giờ ra</label>
-                    <input type="text" class="outtime">
-                </div>
-                <div>
-                    <label for="drink">Đồ uống</label>
-                    <input type="text" class="drink">
-                </div>
-                <div>
-                    <label for="tip">tip</label>
-                    <input type="text" class="tip">
-                </div>
-            </form>
-        `
-    })
-}
-
-const renderSelectBtn = (targetForm) => {
-    const availEmpList = DATA.emp.filter(emp => emp[7] !=='busy')
-    const selectEmpElement = targetForm.querySelector('.ktv')
-    availEmpList.forEach (emp => {
-        selectEmpElement.innerHTML  += `
-            <option value='${emp[3]}'>${emp[3]}</option>
-        `
-    })
-    
-    const roomList = DATA.roomList.filter(room => room[4]>0)
-    const selectRoomElement = targetForm.querySelector('.room')
-    roomList.forEach(room => {
-        selectRoomElement.innerHTML  += `
-        <option value='${room[1]}'>${room[1]}</option>
-        `
-    })
-
-    const serviceList = DATA.service
-    const selectServiceElement = targetForm.querySelector('.service')
-    serviceList.forEach(service => {
-        selectServiceElement.innerHTML  += `
-            <option value='${service[1]}'>${service[1]}</option>
-        `
-    })
-}
-
 const handleLogin = (response) => {
     if (response.status === false){
         dangerComponent.innerHTML = "Tên đăng nhập hoặc mật khẩu sai"
@@ -234,108 +112,113 @@ const handleLogin = (response) => {
     DATA = response.data
     SITE = response.user.site
 
-
-    renderData(DATA)
-
-    const targetForm = document.querySelector('.user-service-form')
-    renderSelectBtn(targetForm)
-
     loginPage.classList.add('hidden')
     navList.classList.remove('hidden')
-    if(USER_TYPE ==='admin'){
-        document.querySelector('.create-user-selector').classList.remove('hidden')
-    }
-    useServiceSelector.classList.add('selected');
-    useService.classList.remove('hidden')
+
+    searchCoupon.classList.add('selected');
+    searchCoupon.classList.remove('hidden')
 
 }
 
-// create service function
-const addCustomer = () => {
-    const target = document.querySelector('.btn-group').parentElement
-    const newEle = document.createElement('form')
-    newEle.classList.add('user-service-form')
-    const newForm =`
-            <div >
-                <label for="locker">Locker</label>
-                <input type="text" class="locker">
+// search coupon
+
+const handelSearchCoupon = () =>{
+    const phoneNo = document.querySelector('.search-coupon input').value
+    const couponList = DATA.coupon.filter(coupon => String(coupon[2]).replace(/\s/g,'') === phoneNo.replace(/\s/g,''))
+
+    const searchResultElement = document.querySelector('.search-result')
+    searchResultElement.innerHTML = ''
+    
+    if (couponList.length === 0){
+        searchResultElement.innerHTML = '<p class="danger">Không tìm thấy khách hàng</p>'
+        
+    }
+    const couponHistory = (coupon) =>{
+        var couponHistoryHtml = ''
+        for (let i = 7; i<22;i++){
+            if (coupon[i]!==""){
+                couponHistoryHtml += `<p>Lần ${i-6}: ${coupon[i]}</p>`
+            }
+        }
+        return couponHistoryHtml
+    }
+
+    couponList.forEach(coupon => {
+        searchResultElement.innerHTML  += `
+        <div class="coupon-id">
+                <label >Coupon ID: </label>
+                <input  value="${coupon[0]}" readonly/>
             </div>
-            <div>
-                <label for="room">Phòng</label>
-                <select name="room" class="room">
-                </select>
+            <div class="coupon-owner">
+                <label >Khách hàng: </label>
+                <input value="${coupon[1]}" readonly/>
             </div>
-            <div>
-                <label for="service">Dịch vụ</label>
-                <select name="service" class="service">
-                </select>
+            <div class="phone-number">
+                <label >Số điện thoại: </label>
+                <input value="${String(coupon[2]).replace(/\s/g,'')}" readonly/>
             </div>
-            
-            <div>
-                <label for="ktv">Kỹ thuật viên</label>
-                <select name="ktv" class="ktv">
-                </select>
+            <div class="coupon-value">
+                <label>Giá trị còn/Tổng: </label>
+                <input  value="${coupon[22]}/${coupon[6]}" readonly/>
             </div>
-            <div>
-                <label for="intime">Giờ vào</label>
-                <input type="time" class="intime" value = "08:00"
-                min="08:00" max="24:00" >
-            </div>
+            <div class="coupon-date">
+                <label >Hạn coupon: </label>
+                <input  value="${coupon[5]}" readonly/>
+        </div>
+        <div class="action-btns">
+        <button class="use-coupon" couponID=${coupon[0]}>Sử dụng Coupon</button>
+        </div>
+        <div class="use-history">
+            ${couponHistory(coupon)}
+        </div>
         `
-    newEle.innerHTML = newForm
-    target.insertBefore(newEle, target.firstChild)
-
-    const targetForm = document.querySelector('.user-service-form')
-    renderSelectBtn(targetForm)    
-
-}
-
-const addCustomerBtn = document.querySelector('#add-more-service')
-addCustomerBtn.addEventListener('click', addCustomer)
-
-const getToday = () =>{
-    var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    var yyyy = today.getFullYear();
-
-    return today = dd + '/' + mm + '/' + yyyy;
-}
-
-const handleSubmit = () =>{
-    renderData(DATA)
-}
-const submitNewService = () => {
-    // get data
-    const serviceInfo =[]
-    const formList = document.querySelectorAll('.user-service-form')
-    const modal = document.querySelector('.modal')
-    modal.classList.remove('hidden')
-    formList.forEach(form => {
-        const locker = form.querySelector('.locker').value
-        const room = form.querySelector('.room').value
-        const service = form.querySelector('.service').value
-        const ktv = form.querySelector('.ktv').value
-        const intime = form.querySelector('.intime').value
-        const today = getToday()
-
-        const data = Array(20).fill('')
-        data[1] = SITE
-        data[2] = locker
-        data[3] = room
-        data[4] = today
-        data[5] = service
-        data[7] = ktv
-        data[8] = intime
-        data[17] = USER_NAME
-        serviceInfo.push(data)
     })
-    // submit
-    let submitData = {
-        "type": "newService",
-        "data": serviceInfo
-    }
+    const modal = document.querySelector('.use-coupon-value')
+    const useBtns = document.querySelectorAll('.action-btns button')
+    useBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault()
+            modal.classList.remove('hidden')
+            COUPONID = btn.getAttribute('couponID')
+        })
+    })
+}
+const searchCouponBtn = document.querySelector('.search-coupon button')
+searchCouponBtn.addEventListener('click',(e) => {
+    e.preventDefault()
+    handelSearchCoupon()})
+// end of search coupon 
 
+// submit use coupon
+const cancelBtn = document.querySelector('.use-coupon-value .cancel')
+
+cancelBtn.addEventListener('click', (e)=>{
+    e.preventDefault()
+    const modal = document.querySelector('.use-coupon-value')
+    modal.classList.add('hidden')
+})
+
+const submitBtn = document.querySelector('.use-coupon-value .submit')
+
+submitBtn.addEventListener('click', (e)=>{
+    e.preventDefault()
+    const modal = document.querySelector('.modal')
+    const useCouponValueEle = document.querySelector('.use-coupon-value')
+    const value = document.querySelector('.use-coupon-value input').value
+    const cautionEle = document.querySelector('.use-coupon-value .danger')
+    if (isNaN(value)){
+        cautionEle.classList.remove('hidden')
+        return
+    }
+    
+    let submitData = {
+        "type": "change",
+        "data": {
+            "couponID": COUPONID,
+            "useValue": value
+        }
+    }
+    modal.classList.add('hidden')
     fetch(URL, {
         method: 'POST',
         headers: {
@@ -343,60 +226,142 @@ const submitNewService = () => {
         },
         body: JSON.stringify(submitData) // body data type must match "Content-Type" header
     })
-    .then (response => response.json())
+    .then (response => {
+        // console.log(response.json())
+        
+        return response.json()})
     .then (data => {
-        console.log (data)
-        DATA = data.data
-        modal.classList.add('hidden')
-        handleSubmit();
+        modal.classList.remove('hidden')
+        handleSubmitChange(data);
+        useCouponValueEle.classList.add('hidden')
+        alert ('Cập nhật thành công')
     }).catch(error => {
-        modal.classList.add('hidden')
+        console.error('Error:', error);
+    });
+})
+
+const handleSubmitChange = (data) =>{
+    DATA = data.data
+   handelSearchCoupon()
+    
+}
+
+// submit new coupon
+const createCouponBtn = document.querySelector('#create-coupon')
+const inputList = document.querySelectorAll('.create-coupon input')
+const cautionEle = document.querySelector('.create-coupon .danger')
+const couponID = document.querySelector('#coupon-id')
+const couponOwner = document.querySelector('#coupon-owner')
+const phoneNumber = document.querySelector('#phone-number')
+const couponValue = document.querySelector('#coupon-value')
+const couponDate = document.querySelector('#coupon-date')
+
+inputList.forEach(input => {
+    input.addEventListener('input', () => {
+        if (cautionEle.classList.contains('hidden')) {return}
+        cautionEle.classList.add('hidden')
+    })
+})
+
+createCouponBtn.addEventListener('click', (e)=>{ 
+    e.preventDefault()
+    const modal = document.querySelector('.modal')
+
+    // validate input
+    var date_regex = /^(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[0-2])\/(19|20)\d{2}$/;
+    if (!(date_regex.test(couponDate.value))) {
+        console.log (couponDate)
+        cautionEle.innerHTML = 'Nhập đúng định dạng ngày dd/mm/yyyy'
+        cautionEle.classList.remove('hidden')
+        return
+    }
+    if (isNaN(couponValue.value)){
+        cautionEle.innerHTML = 'Giá trị coupon phải là số'
+        cautionEle.classList.remove('hidden')
+        couponValue.value = ''
+        return
+    }
+    console.log(1)
+    if (DATA.coupon.map(coupon=> coupon[0]).includes(couponID.value)){
+        cautionEle.innerHTML = 'Coupon ID đã tồn tại'
+        cautionEle.classList.remove('hidden')
+        return
+    }
+    if(couponID.value === ''||
+        couponOwner.value === ''||
+        phoneNumber.value ===''||
+        couponValue.value ===''||
+        couponDate.value ===''){
+
+        cautionEle.innerHTML = 'Nhập đủ thông tin trước khi tạo coupon'
+        cautionEle.classList.remove('hidden')
+        return
+    }
+
+// submit
+    let submitData = {
+        "type": "new",
+        "data": {
+            "couponID": couponID.value,
+            "couponOwner": couponOwner.value,
+            "phoneNumber": phoneNumber.value,
+            "couponValue": couponValue.value,
+            "couponDate": couponDate.value,
+            "creator": USER_NAME,
+            "createDate": getToday()
+        }
+    }
+    modal.classList.add('hidden')
+    fetch(URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8'
+        },
+        body: JSON.stringify(submitData) // body data type must match "Content-Type" header
+    })
+    .then (response => {
+        // console.log(response.json())
+        
+        return response.json()})
+    .then (data => {
+        modal.classList.remove('hidden')
+        handleSubmitNew(data);
+        useCouponValueEle.classList.add('hidden')
+        alert ('Cập nhật thành công')
+    }).catch(error => {
         console.error('Error:', error);
     });
 
-}
+})
 
-const createServiceBtn = document.querySelector('#create-service')
-createServiceBtn.addEventListener('click', submitNewService)
-// end of create service
+const handleSubmitNew = (data) =>{ 
+    DATA = data.data
+    // switch to searchCoupon page
+    searchCoupon.classList.add('selected');
+    searchCoupon.classList.remove('hidden')
+    createCouponSelector.classList.remove('selected')
+    createCoupon.classList.add ('hidden')
+    // find coupon to use
+    const phoneNo = document.querySelector('.search-coupon input')
+    phoneNo.value = phoneNumber.value
+    handelSearchCoupon()
 
-// search coupon
-
-const handelSearchCoupon = (e) =>{
-    e.preventDefault();
-    const phoneNo = document.querySelector('.search-coupon input').value
-    const couponList = DATA.coupon.filter(coupon => coupon[2].replace(/\s/g,'') === phoneNo.replace(/\s/g,''))
-    console.log (couponList)
-
-    const searchResultElement = document.querySelector('.search-result')
-    searchResultElement.innerHTML = ''
-    couponList.forEach(coupon => {
-        searchResultElement.innerHTML  += `
-        <div class="coupon-id">
-                <label for="coupon-id">Coupon ID: </label>
-                <input id="coupon-id" value="${coupon[0]}" readonly/>
-            </div>
-            <div class="coupon-owner">
-                <label for="coupon-owner">Khách hàng: </label>
-                <input id="coupon-owner" value="${coupon[1]}" readonly/>
-            </div>
-            <div class="phone-number">
-                <label for="phone-number">Số điện thoại: </label>
-                <input id="phone-number" value="${coupon[2].replace(/\s/g,'')}" readonly/>
-            </div>
-            <div class="coupon-value">
-                <label for="coupon-value">Giá trị còn/Tổng: </label>
-                <input id="coupon-value" value="${coupon[22]}/${coupon[6]}" readonly/>
-            </div>
-            <div class="coupon-date">
-                <label for="coupon-date">Hạn coupon: </label>
-                <input id="coupon-date" value="${coupon[5]}" readonly/>
-        </div>
-        `
+    inputList.forEach(input => {
+        input.addEventListener('input', () => {
+            input.value =''
+        })
     })
 
-}
-const searchCouponBtn = document.querySelector('.search-coupon button')
-searchCouponBtn.addEventListener('click',handelSearchCoupon)
-// end of search coupon
 
+}
+
+const getToday = () =>{
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+
+    today = dd + '/' + mm + '/' + yyyy;
+    return today
+}
+// end submit new coupon
