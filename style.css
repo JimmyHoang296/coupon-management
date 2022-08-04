@@ -200,13 +200,14 @@ button:hover{
     margin-bottom: 0;
 }
 
-.search-result{
+.search-result>div{
     display: grid;
     grid-row-gap: 10px;
     grid-template-columns: 1fr 1fr;
     background-color: rgb(255, 255, 255,0.2);
     padding: 20px;
     border-radius: 10px;
+    margin-bottom: 10px;
 }
 
 .search-result input{
@@ -280,8 +281,8 @@ button:hover{
     height: 100vh;
     top: 0;
     left: 0;
-    background-color: rgb(255, 255, 255,0.5);
-    z-index: 9999;
+    background: transparent;
+    /* z-index: 1; */
 
     display: flex;
     justify-content: center;
@@ -299,6 +300,25 @@ button:hover{
     background: rgba(255, 0, 0, 0.658);
 }
 
+.modal{
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background: rgb(255, 255, 255,0.5);
+    z-index: 999;
+}
+
 .hidden{
     display: none;
+}
+
+.out-date{
+    opacity: 0.6;
+    user-select: none;
+}
+
+.out-date input{
+    pointer-events:none;
 }

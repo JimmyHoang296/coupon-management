@@ -5,7 +5,7 @@ var SITE
 var IS_LOG_IN
 var DATA
 var COUPONID
-const URL = "https://script.google.com/macros/s/AKfycbyPXO2T7g3BVFJaEeFxtTbFNZDxBbCtJwOw72aIiqc1hOTd9LbWo7PxNnrtkIeOb66U/exec"
+const URL = "https://script.google.com/macros/s/AKfycbw4_4sitR2XwEaCDxBXGEZQ7BJ5-lnS2P8lM7rumQsJS7Our0JGPnTi3q3dmbgzIu0C/exec"
 // nav function
 
 const searchCouponSelector = document.querySelector('.search-coupon-selector')
@@ -93,6 +93,7 @@ loginBtn.addEventListener('click', (e)=>{
         handleLogin(data);
     }).catch(error => {
         console.error('Error:', error);
+        alert ('Cập nhật không thành công, hãy thử lại')
     });
 })
 
@@ -118,6 +119,21 @@ const handleLogin = (response) => {
 
 }
 
+const getStrDay = (dateString) =>{ 
+    mydate = dateString.slice(0,10)
+    const dd = mydate.slice(8,10)
+    const mm = mydate.slice(5,7)
+    const yyyy = mydate.slice(0,4)
+
+    return (`${dd}/${mm}/${yyyy}`)
+
+}
+const compareToday = (dateString) => {
+    const today = new Date()
+    const mydate = Date.parse(dateString)
+
+    return (today > mydate)
+}
 // search coupon
 
 const handelSearchCoupon = () =>{
@@ -142,8 +158,11 @@ const handelSearchCoupon = () =>{
     }
 
     couponList.forEach(coupon => {
-        searchResultElement.innerHTML  += `
-        <div class="coupon-id">
+        searchResultElement.innerHTML = `
+        <div class="${compareToday(coupon[5])?'out-date':''}">
+        ${compareToday(coupon[5])?'<p class="danger">Coupon hết hạn</p>':''}
+        
+        <div class="coupon-id " >
                 <label >Coupon ID: </label>
                 <input  value="${coupon[0]}" readonly/>
             </div>
@@ -161,15 +180,16 @@ const handelSearchCoupon = () =>{
             </div>
             <div class="coupon-date">
                 <label >Hạn coupon: </label>
-                <input  value="${coupon[5]}" readonly/>
+                <input  value="${getStrDay(String(coupon[5]))}" readonly/>
         </div>
-        <div class="action-btns">
+        <div class="action-btns ${compareToday(coupon[5])?'hidden':''}">
         <button class="use-coupon" couponID=${coupon[0]}>Sử dụng Coupon</button>
         </div>
         <div class="use-history">
             ${couponHistory(coupon)}
         </div>
-        `
+        </div>
+        ` + searchResultElement.innerHTML
     })
     const modal = document.querySelector('.use-coupon-value')
     const useBtns = document.querySelectorAll('.action-btns button')
@@ -216,7 +236,7 @@ submitBtn.addEventListener('click', (e)=>{
             "useValue": value
         }
     }
-    modal.classList.add('hidden')
+    modal.classList.remove('hidden')
     fetch(URL, {
         method: 'POST',
         headers: {
@@ -228,12 +248,13 @@ submitBtn.addEventListener('click', (e)=>{
         
         return response.json()})
     .then (data => {
-        modal.classList.remove('hidden')
+        modal.classList.add('hidden')
         handleSubmitChange(data);
         useCouponValueEle.classList.add('hidden')
         alert ('Cập nhật thành công')
     }).catch(error => {
         console.error('Error:', error);
+        alert ('Cập nhật không thành công, hãy thử lại')
     });
 })
 
@@ -320,10 +341,10 @@ createCouponBtn.addEventListener('click', (e)=>{
     .then (data => {
         modal.classList.remove('hidden')
         handleSubmitNew(data);
-        useCouponValueEle.classList.add('hidden')
         alert ('Cập nhật thành công')
     }).catch(error => {
         console.error('Error:', error);
+        alert ('Cập nhật không thành công, hãy thử lại')
     });
 
 })
