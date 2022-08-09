@@ -238,6 +238,11 @@ cancelBtn.addEventListener('click', (e)=>{
     modal.classList.add('hidden')
 })
 
+const valueEle = document.querySelector('.use-coupon-value input')
+valueEle.addEventListener('input',()=>{
+    const cautionEle = document.querySelector('.use-coupon-value .danger')
+    cautionEle.classList.add('hidden')
+})
 const submitBtn = document.querySelector('.use-coupon-value .submit')
 
 submitBtn.addEventListener('click', (e)=>{
@@ -257,7 +262,7 @@ submitBtn.addEventListener('click', (e)=>{
         cautionEle.classList.remove('hidden')
         return
     }
-    
+
     let submitData = {
         "type": "change",
         "data": {
