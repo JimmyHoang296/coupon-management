@@ -32,8 +32,16 @@
         <!-- search coupon -->
         <div class="search-coupon section hidden">
             <form class="search-form">
-                <input type="text" placeholder="SDT khách hàng" />
-                <button>Tìm kiếm khách</button>
+                <div>
+                    <input type="text" id = "searchText" placeholder="Nhập số ĐT KH" />
+                    <button>Tìm kiếm khách</button>
+                </div>
+                <div class = "option">
+                    <input type="checkbox" id = "isName">
+                    <label for="isName">Tìm theo tên</label>
+                    <input type="checkbox" id = "isOD">
+                    <label for="isOD">Tìm coupon đã hết hạn</label>
+                </div>
             </form>
             <div class="search-result"></div>
         </div>

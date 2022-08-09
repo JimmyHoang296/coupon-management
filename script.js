@@ -5,7 +5,7 @@ var SITE
 var IS_LOG_IN
 var DATA
 var COUPONID
-const URL = "https://script.google.com/macros/s/AKfycbw4_4sitR2XwEaCDxBXGEZQ7BJ5-lnS2P8lM7rumQsJS7Our0JGPnTi3q3dmbgzIu0C/exec"
+const URL = "https://script.google.com/macros/s/AKfycbx7BOLQdpZwTWIPPwstSPHZo9MTSRaC-j2z-2VeViFBRzcreoksZbsB5mmMLGueiQG4/exec"
 // nav function
 
 const searchCouponSelector = document.querySelector('.search-coupon-selector')
@@ -105,6 +105,7 @@ const handleLogin = (response) => {
     }
        
     alert ('Đăng nhập thành công')
+    console.log (response)
     USER_NAME = userNameInput.value
     USER_TYPE = response.userType
     IS_LOG_IN = true
@@ -114,12 +115,14 @@ const handleLogin = (response) => {
     loginPage.classList.add('hidden')
     navList.classList.remove('hidden')
 
-    searchCoupon.classList.add('selected');
+    searchCouponSelector.classList.add('selected');
     searchCoupon.classList.remove('hidden')
 
 }
 
 const getStrDay = (dateString) =>{ 
+    if (dateString.length === 10){return dateString}
+
     mydate = dateString.slice(0,10)
     const dd = mydate.slice(8,10)
     const mm = mydate.slice(5,7)
@@ -135,10 +138,28 @@ const compareToday = (dateString) => {
     return (today > mydate)
 }
 // search coupon
+const isName = document.querySelector('.search-coupon #isName')
 
+isName.addEventListener('change',()=>{
+    const searchText = document.querySelector('.search-coupon #searchText')
+    if(isName.checked){
+        searchText.placeholder  ="Nhập tên KH"
+    }else{
+        searchText.placeholder  ="Nhập số ĐT KH"
+    }
+})
 const handelSearchCoupon = () =>{
-    const phoneNo = document.querySelector('.search-coupon input').value
-    const couponList = DATA.coupon.filter(coupon => String(coupon[2]).replace(/\s/g,'') === phoneNo.replace(/\s/g,''))
+    const searchText = document.querySelector('.search-coupon #searchText').value
+    const isOD = document.querySelector('.search-coupon #isOD').checked
+    const isName = document.querySelector('.search-coupon #isName').checked
+    var data = isOD? DATA.odCoupon : DATA.coupon
+    var couponList
+   
+    if (isName){
+        couponList = data.filter(coupon => coupon.customerName.toUpperCase().includes(searchText.toUpperCase()))
+    }else{
+        couponList = data.filter(coupon => String(coupon.phoneNumber).replace(/\s/g,'') === searchText.replace(/\s/g,''))
+    }
 
     const searchResultElement = document.querySelector('.search-result')
     searchResultElement.innerHTML = ''
@@ -149,9 +170,9 @@ const handelSearchCoupon = () =>{
     }
     const couponHistory = (coupon) =>{
         var couponHistoryHtml = ''
-        for (let i = 7; i<22;i++){
+        for (let i = 1; i<16;i++){
             if (coupon[i]!==""){
-                couponHistoryHtml += `<p>Lần ${i-6}: ${coupon[i]}</p>`
+                couponHistoryHtml += `<p>Lần ${i}: ${coupon[i]}</p>`
             }
         }
         return couponHistoryHtml
@@ -159,31 +180,31 @@ const handelSearchCoupon = () =>{
 
     couponList.forEach(coupon => {
         searchResultElement.innerHTML = `
-        <div class="${compareToday(coupon[5])?'out-date':''}">
-        ${compareToday(coupon[5])?'<p class="danger">Coupon hết hạn</p>':''}
+        <div class="${compareToday(coupon.endDate)?'out-date':''}">
+        ${compareToday(coupon.endDate)?'<p class="danger">Coupon hết hạn</p>':''}
         
         <div class="coupon-id " >
                 <label >Coupon ID: </label>
-                <input  value="${coupon[0]}" readonly/>
+                <input  value="${coupon.couponID}" readonly/>
             </div>
             <div class="coupon-owner">
                 <label >Khách hàng: </label>
-                <input value="${coupon[1]}" readonly/>
+                <input value="${coupon.customerName}" readonly/>
             </div>
             <div class="phone-number">
                 <label >Số điện thoại: </label>
-                <input value="${String(coupon[2]).replace(/\s/g,'')}" readonly/>
+                <input value="${String(coupon.phoneNumber).replace(/\s/g,'')}" readonly/>
             </div>
             <div class="coupon-value">
                 <label>Giá trị còn/Tổng: </label>
-                <input  value="${coupon[22]}/${coupon[6]}" readonly/>
+                <input  value="${coupon.remain}/${coupon.total}" readonly/>
             </div>
             <div class="coupon-date">
                 <label >Hạn coupon: </label>
-                <input  value="${getStrDay(String(coupon[5]))}" readonly/>
+                <input  value="${getStrDay(coupon.endDate)}" readonly/>
         </div>
-        <div class="action-btns ${compareToday(coupon[5])?'hidden':''}">
-        <button class="use-coupon" couponID=${coupon[0]}>Sử dụng Coupon</button>
+        <div class="action-btns ${compareToday(coupon.endDate)?'hidden':''}">
+        <button class="use-coupon" couponID=${coupon.couponID}>Sử dụng Coupon</button>
         </div>
         <div class="use-history">
             ${couponHistory(coupon)}
@@ -233,6 +254,9 @@ submitBtn.addEventListener('click', (e)=>{
         "type": "change",
         "data": {
             "couponID": COUPONID,
+            "site": SITE,
+            "date": getToday(),
+            "time": getTime(),
             "useValue": value
         }
     }
@@ -258,8 +282,8 @@ submitBtn.addEventListener('click', (e)=>{
     });
 })
 
-const handleSubmitChange = (data) =>{
-    DATA = data.data
+const handleSubmitChange = (response) =>{
+    DATA = response.data
    handelSearchCoupon()
     
 }
@@ -314,6 +338,13 @@ createCouponBtn.addEventListener('click', (e)=>{
         return
     }
 
+    const clearInput = () =>{
+        couponID.value = ''
+        couponOwner.value = ''
+        phoneNumber.value = ''
+        couponValue.value = ''
+        couponDate.value = ''
+    }
 // submit
     let submitData = {
         "type": "new",
@@ -323,11 +354,12 @@ createCouponBtn.addEventListener('click', (e)=>{
             "phoneNumber": phoneNumber.value,
             "couponValue": couponValue.value,
             "couponDate": couponDate.value,
+            "site": SITE,
             "creator": USER_NAME,
             "createDate": getToday()
         }
     }
-    modal.classList.add('hidden')
+    modal.classList.remove('hidden')
     fetch(URL, {
         method: 'POST',
         headers: {
@@ -339,8 +371,9 @@ createCouponBtn.addEventListener('click', (e)=>{
         
         return response.json()})
     .then (data => {
-        modal.classList.remove('hidden')
+        modal.classList.add('hidden')
         handleSubmitNew(data);
+        clearInput()
         alert ('Cập nhật thành công')
     }).catch(error => {
         console.error('Error:', error);
@@ -349,8 +382,8 @@ createCouponBtn.addEventListener('click', (e)=>{
 
 })
 
-const handleSubmitNew = (data) =>{ 
-    DATA = data.data
+const handleSubmitNew = (response) =>{ 
+    DATA = response.data
     // switch to searchCoupon page
     searchCoupon.classList.add('selected');
     searchCoupon.classList.remove('hidden')
@@ -379,4 +412,11 @@ const getToday = () =>{
     today = dd + '/' + mm + '/' + yyyy;
     return today
 }
+
+const getTime = () =>{
+    var today = new Date();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()
+    return time
+}
+
 // end submit new coupon

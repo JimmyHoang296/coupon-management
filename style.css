@@ -190,9 +190,12 @@ button:hover{
 
 .search-form{
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
     padding: 10px 0;
     margin-bottom: 20px;
+    gap: 10px;
 }
 
 .search-form input{
@@ -220,6 +223,18 @@ button:hover{
     
 }
 
+.option{
+    color:#ffffff;
+    margin-top: 10px;
+}
+
+.option label{
+    margin-right: 20px;
+    cursor: pointer;
+}
+.option input{
+    cursor: pointer;
+}
 .coupon-id{
     grid-column: 1/3;
 }
