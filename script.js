@@ -4,7 +4,7 @@ var USER_TYPE
 var SITE
 var IS_LOG_IN
 var DATA
-var COUPONID
+var COUPON = {}
 const URL = "https://script.google.com/macros/s/AKfycbx7BOLQdpZwTWIPPwstSPHZo9MTSRaC-j2z-2VeViFBRzcreoksZbsB5mmMLGueiQG4/exec"
 // nav function
 
@@ -105,7 +105,7 @@ const handleLogin = (response) => {
     }
        
     alert ('Đăng nhập thành công')
-    console.log (response)
+    
     USER_NAME = userNameInput.value
     USER_TYPE = response.userType
     IS_LOG_IN = true
@@ -148,7 +148,7 @@ isName.addEventListener('change',()=>{
         searchText.placeholder  ="Nhập số ĐT KH"
     }
 })
-const handelSearchCoupon = () =>{
+const handleSearchCoupon = () =>{
     const searchText = document.querySelector('.search-coupon #searchText').value
     const isOD = document.querySelector('.search-coupon #isOD').checked
     const isName = document.querySelector('.search-coupon #isName').checked
@@ -204,7 +204,7 @@ const handelSearchCoupon = () =>{
                 <input  value="${getStrDay(coupon.endDate)}" readonly/>
         </div>
         <div class="action-btns ${compareToday(coupon.endDate)?'hidden':''}">
-        <button class="use-coupon" couponID=${coupon.couponID}>Sử dụng Coupon</button>
+        <button class="use-coupon" couponID=${coupon.couponID} couponRemain=${coupon.remain}>Sử dụng Coupon</button>
         </div>
         <div class="use-history">
             ${couponHistory(coupon)}
@@ -218,14 +218,15 @@ const handelSearchCoupon = () =>{
         btn.addEventListener('click', (e) => {
             e.preventDefault()
             modal.classList.remove('hidden')
-            COUPONID = btn.getAttribute('couponID')
+            COUPON.ID = btn.getAttribute('couponID')
+            COUPON.REMAIN = btn.getAttribute('couponRemain')
         })
     })
 }
 const searchCouponBtn = document.querySelector('.search-coupon button')
 searchCouponBtn.addEventListener('click',(e) => {
     e.preventDefault()
-    handelSearchCoupon()})
+    handleSearchCoupon()})
 // end of search coupon 
 
 // submit use coupon
@@ -246,6 +247,13 @@ submitBtn.addEventListener('click', (e)=>{
     const value = document.querySelector('.use-coupon-value input').value
     const cautionEle = document.querySelector('.use-coupon-value .danger')
     if (isNaN(value)){
+        
+        cautionEle.innerHTML = 'Nhập đúng số sử dụng'
+        cautionEle.classList.remove('hidden')
+        return
+    }
+    if (value > COUPON.REMAIN*1 ){
+        cautionEle.innerHTML = 'Giá trị còn lại không đủ'
         cautionEle.classList.remove('hidden')
         return
     }
@@ -253,7 +261,7 @@ submitBtn.addEventListener('click', (e)=>{
     let submitData = {
         "type": "change",
         "data": {
-            "couponID": COUPONID,
+            "couponID": COUPON.ID,
             "site": SITE,
             "date": getToday(),
             "time": getTime(),
@@ -284,7 +292,7 @@ submitBtn.addEventListener('click', (e)=>{
 
 const handleSubmitChange = (response) =>{
     DATA = response.data
-   handelSearchCoupon()
+   handleSearchCoupon()
     
 }
 
@@ -322,7 +330,7 @@ createCouponBtn.addEventListener('click', (e)=>{
         couponValue.value = ''
         return
     }
-    if (DATA.coupon.map(coupon=> coupon[0]).includes(couponID.value)){
+    if (DATA.coupon.map(coupon=> coupon.couponID).includes(couponID.value)){
         cautionEle.innerHTML = 'Coupon ID đã tồn tại'
         cautionEle.classList.remove('hidden')
         return
@@ -338,13 +346,6 @@ createCouponBtn.addEventListener('click', (e)=>{
         return
     }
 
-    const clearInput = () =>{
-        couponID.value = ''
-        couponOwner.value = ''
-        phoneNumber.value = ''
-        couponValue.value = ''
-        couponDate.value = ''
-    }
 // submit
     let submitData = {
         "type": "new",
@@ -373,7 +374,6 @@ createCouponBtn.addEventListener('click', (e)=>{
     .then (data => {
         modal.classList.add('hidden')
         handleSubmitNew(data);
-        clearInput()
         alert ('Cập nhật thành công')
     }).catch(error => {
         console.error('Error:', error);
@@ -392,13 +392,9 @@ const handleSubmitNew = (response) =>{
     // find coupon to use
     const phoneNo = document.querySelector('.search-coupon input')
     phoneNo.value = phoneNumber.value
-    handelSearchCoupon()
+    handleSearchCoupon()
 
-    inputList.forEach(input => {
-        input.addEventListener('input', () => {
-            input.value =''
-        })
-    })
+    inputList.forEach(input =>input.value ='')
 
 
 }
