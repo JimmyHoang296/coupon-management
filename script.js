@@ -5,9 +5,9 @@ var SITE
 var IS_LOG_IN
 var DATA
 var COUPON = {}
-const URL = "https://script.google.com/macros/s/AKfycbx7BOLQdpZwTWIPPwstSPHZo9MTSRaC-j2z-2VeViFBRzcreoksZbsB5mmMLGueiQG4/exec"
-// nav function
+const URL = "https://script.google.com/macros/s/AKfycbw0CZg2Ef_FgFrR_X-Ekm0biS4ukO0VOkaac0syYznwWgcY2mFTjUf7CQw1gx6YQbxb/exec"
 
+// nav function
 const searchCouponSelector = document.querySelector('.search-coupon-selector')
 const createCouponSelector = document.querySelector('.create-coupon-selector')
 
@@ -138,29 +138,21 @@ const compareToday = (dateString) => {
     return (today > mydate)
 }
 // search coupon
-const isName = document.querySelector('.search-coupon #isName')
 
-isName.addEventListener('change',()=>{
-    const searchText = document.querySelector('.search-coupon #searchText')
-    if(isName.checked){
-        searchText.placeholder  ="Nhập tên KH"
-    }else{
-        searchText.placeholder  ="Nhập số ĐT KH"
-    }
-})
 const handleSearchCoupon = () =>{
-    const searchText = document.querySelector('.search-coupon #searchText').value
+    const searchPhone = document.querySelector('.search-coupon #searchPhone').value
+    const searchName = document.querySelector('.search-coupon #searchName').value
     const isOD = document.querySelector('.search-coupon #isOD').checked
-    const isName = document.querySelector('.search-coupon #isName').checked
     var data = isOD? DATA.odCoupon : DATA.coupon
     var couponList
-   
-    if (isName){
-        couponList = data.filter(coupon => coupon.customerName.toUpperCase().includes(searchText.toUpperCase()))
-    }else{
-        couponList = data.filter(coupon => String(coupon.phoneNumber).replace(/\s/g,'') === searchText.replace(/\s/g,''))
+    
+    if (searchPhone!==""){
+        couponList = data.filter(coupon => String(coupon.phoneNumber).replace(/\s/g,'').slice(-searchPhone.replace(/\s/g,'').length) ===searchPhone.replace(/\s/g,''))
+        couponList = couponList.filter(coupon => coupon.customerName.toUpperCase().includes(searchName.toUpperCase()))
+    }else if (searchName!==""){
+        couponList = data.filter(coupon => coupon.customerName.toUpperCase().includes(searchName.toUpperCase()))
     }
-
+    
     const searchResultElement = document.querySelector('.search-result')
     searchResultElement.innerHTML = ''
     
@@ -230,6 +222,13 @@ searchCouponBtn.addEventListener('click',(e) => {
 // end of search coupon 
 
 // submit use coupon
+
+document.querySelector('.use-coupon-value form').onkeypress = function(e) {
+    var key = e.charCode || e.keyCode || 0;     
+    if (key == 13) {
+      e.preventDefault();
+    }
+  }
 const cancelBtn = document.querySelector('.use-coupon-value .cancel')
 
 cancelBtn.addEventListener('click', (e)=>{
@@ -247,9 +246,15 @@ const submitBtn = document.querySelector('.use-coupon-value .submit')
 
 submitBtn.addEventListener('click', (e)=>{
     e.preventDefault()
+    handleSubmitChange(e)
+})
+
+const handleSubmitChange = (e) =>{
+    e.preventDefault()
     const modal = document.querySelector('.modal')
     const useCouponValueEle = document.querySelector('.use-coupon-value')
-    const value = document.querySelector('.use-coupon-value input').value
+    const value = document.querySelector('.use-coupon-value #usedValue').value
+    const note = document.querySelector('.use-coupon-value #note').value
     const cautionEle = document.querySelector('.use-coupon-value .danger')
     if (isNaN(value)){
         
@@ -270,7 +275,8 @@ submitBtn.addEventListener('click', (e)=>{
             "site": SITE,
             "date": getToday(),
             "time": getTime(),
-            "useValue": value
+            "useValue": value,
+            "note": note
         }
     }
     modal.classList.remove('hidden')
@@ -286,18 +292,16 @@ submitBtn.addEventListener('click', (e)=>{
         return response.json()})
     .then (data => {
         modal.classList.add('hidden')
-        handleSubmitChange(data);
+        DATA = data.data
+        handleSearchCoupon();
         useCouponValueEle.classList.add('hidden')
+        document.querySelector('.use-coupon-value #usedValue').value =""
+        document.querySelector('.use-coupon-value #note').value =""
         alert ('Cập nhật thành công')
     }).catch(error => {
         console.error('Error:', error);
         alert ('Cập nhật không thành công, hãy thử lại')
     });
-})
-
-const handleSubmitChange = (response) =>{
-    DATA = response.data
-   handleSearchCoupon()
     
 }
 

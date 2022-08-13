@@ -314,7 +314,9 @@ button:hover{
 .use-coupon-value .cancel{
     background: rgba(255, 0, 0, 0.658);
 }
-
+.use-coupon-value #note{
+    width: 100%;
+}
 .modal{
     position: fixed;
     width: 100vw;

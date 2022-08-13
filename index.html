@@ -20,7 +20,7 @@
         </header>
 
         <!-- login -->
-        <div class="login-page ">
+        <div class="login-page  ">
             <form class="login-form">
                 <input type="text" placeholder="username" id="user-name"/>
                 <input type="password" placeholder="password" id = "password"/>
@@ -30,15 +30,14 @@
             </form>
         </div>
         <!-- search coupon -->
-        <div class="search-coupon section hidden">
-            <form class="search-form">
+        <div class="search-coupon section hidden ">
+            <form class="search-form" onsubmit = "return handleSearchCoupon()">
                 <div>
-                    <input type="text" id = "searchText" placeholder="Nhập số ĐT KH" />
+                    <input type="text" id = "searchPhone" placeholder="Nhập số ĐT KH" />
+                    <input type="text" id = "searchName" placeholder="Nhập tên KH" />
                     <button>Tìm kiếm khách</button>
                 </div>
                 <div class = "option">
-                    <input type="checkbox" id = "isName">
-                    <label for="isName">Tìm theo tên</label>
                     <input type="checkbox" id = "isOD">
                     <label for="isOD">Tìm coupon đã hết hạn</label>
                 </div>
@@ -48,8 +47,9 @@
         <!-- end of search coupon -->
         <!-- start use coupon -->
         <div class="use-coupon-value hidden">
-            <form action="">
-                <input type="text" class="use-value" placeholder="Giá trị sử dụng">
+            <form  onsubmit = "return handleSubmitChange(e)">
+                <input type="text" id="usedValue" class="use-value" placeholder="Giá trị sử dụng">
+                <input type="text" id="note" class="use-value" placeholder="Ghi chú nếu có">
                 <div>
                     <button class="submit">Sử dụng</button>
                     <button class="cancel">Bỏ qua</button>
